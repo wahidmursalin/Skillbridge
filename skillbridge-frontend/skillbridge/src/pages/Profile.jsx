@@ -9,10 +9,14 @@ export default function Profile() {
   const { skills } = useData()
   const [form, setForm] = useState(user)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    updateProfile(form)
-    toast.success('Profile updated.')
+    try {
+      await updateProfile(form)
+      toast.success('Profile updated.')
+    } catch (err) {
+      toast.error(err.message || 'Could not update profile.')
+    }
   }
 
   const field = (label, key) => (

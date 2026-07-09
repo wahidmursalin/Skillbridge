@@ -36,22 +36,30 @@ export default function Skills() {
     setModalOpen(true)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!form.name.trim()) return toast.error('Skill name is required.')
-    if (editing) {
-      skills.update(editing.id, form)
-      toast.success('Skill updated.')
-    } else {
-      skills.add(form)
-      toast.success('Skill added.')
+    try {
+      if (editing) {
+        await skills.update(editing.id, form)
+        toast.success('Skill updated.')
+      } else {
+        await skills.add(form)
+        toast.success('Skill added.')
+      }
+      setModalOpen(false)
+    } catch (err) {
+      toast.error(err.message || 'Something went wrong.')
     }
-    setModalOpen(false)
   }
 
-  const handleDelete = (id) => {
-    skills.remove(id)
-    toast.info('Skill removed.')
+  const handleDelete = async (id) => {
+    try {
+      await skills.remove(id)
+      toast.info('Skill removed.')
+    } catch (err) {
+      toast.error(err.message || 'Could not remove skill.')
+    }
   }
 
   return (

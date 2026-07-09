@@ -9,7 +9,7 @@ export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' })
   const [submitting, setSubmitting] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!form.name || !form.email || !form.password) {
       toast.error('Please fill in all fields.')
@@ -20,12 +20,15 @@ export default function Register() {
       return
     }
     setSubmitting(true)
-    setTimeout(() => {
-      register(form)
+    try {
+      await register(form)
       toast.success('Account created!')
-      setSubmitting(false)
       navigate('/dashboard')
-    }, 400)
+    } catch (err) {
+      toast.error(err.message || 'Registration failed.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const field = (label, key, type = 'text') => (

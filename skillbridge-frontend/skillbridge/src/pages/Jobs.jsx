@@ -39,17 +39,30 @@ export default function Jobs() {
     setModalOpen(true)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!form.company.trim() || !form.position.trim()) return toast.error('Company and position are required.')
-    if (editing) {
-      jobs.update(editing.id, form)
-      toast.success('Application updated.')
-    } else {
-      jobs.add(form)
-      toast.success('Application added.')
+    try {
+      if (editing) {
+        await jobs.update(editing.id, form)
+        toast.success('Application updated.')
+      } else {
+        await jobs.add(form)
+        toast.success('Application added.')
+      }
+      setModalOpen(false)
+    } catch (err) {
+      toast.error(err.message || 'Something went wrong.')
     }
-    setModalOpen(false)
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      await jobs.remove(id)
+      toast.info('Application removed.')
+    } catch (err) {
+      toast.error(err.message || 'Could not remove application.')
+    }
   }
 
   const field = (label, key, type = 'text') => (
@@ -96,7 +109,7 @@ export default function Jobs() {
       ) : (
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((j) => (
-            <JobCard key={j.id} job={j} onEdit={openEdit} onDelete={(id) => { jobs.remove(id); toast.info('Application removed.') }} />
+            <JobCard key={j.id} job={j} onEdit={openEdit} onDelete={handleDelete} />
           ))}
         </div>
       )}

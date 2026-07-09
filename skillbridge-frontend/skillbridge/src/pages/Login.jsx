@@ -9,19 +9,22 @@ export default function Login() {
   const [form, setForm] = useState({ email: '', password: '', remember: true })
   const [submitting, setSubmitting] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!form.email || !form.password) {
       toast.error('Please fill in both fields.')
       return
     }
     setSubmitting(true)
-    setTimeout(() => {
-      login(form)
+    try {
+      await login(form)
       toast.success('Welcome back!')
-      setSubmitting(false)
       navigate('/dashboard')
-    }, 400)
+    } catch (err) {
+      toast.error(err.message || 'Login failed.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (

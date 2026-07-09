@@ -21,21 +21,25 @@ async function request(path, options = {}) {
   return res.json()
 }
 
+// Builds the four get/add/update/delete calls for a resource, since
+// skills, certificates, projects, and jobs all follow the same REST shape.
+function resource(path) {
+  return {
+    list: () => request(`/${path}`),
+    add: (data) => request(`/${path}`, { method: 'POST', body: JSON.stringify(data) }),
+    update: (id, data) => request(`/${path}/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    remove: (id) => request(`/${path}/${id}`, { method: 'DELETE' })
+  }
+}
+
 export const api = {
   register: (data) => request('/register', { method: 'POST', body: JSON.stringify(data) }),
   login: (data) => request('/login', { method: 'POST', body: JSON.stringify(data) }),
+  me: () => request('/me'),
+  updateMe: (data) => request('/me', { method: 'PUT', body: JSON.stringify(data) }),
 
-  getSkills: () => request('/skills'),
-  addSkill: (data) => request('/skills', { method: 'POST', body: JSON.stringify(data) }),
-  updateSkill: (id, data) => request(`/skills/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
-  deleteSkill: (id) => request(`/skills/${id}`, { method: 'DELETE' }),
-
-  getCertificates: () => request('/certificates'),
-  addCertificate: (data) => request('/certificates', { method: 'POST', body: JSON.stringify(data) }),
-
-  getProjects: () => request('/projects'),
-  addProject: (data) => request('/projects', { method: 'POST', body: JSON.stringify(data) }),
-
-  getJobs: () => request('/jobs'),
-  addJob: (data) => request('/jobs', { method: 'POST', body: JSON.stringify(data) })
+  skills: resource('skills'),
+  certificates: resource('certificates'),
+  projects: resource('projects'),
+  jobs: resource('jobs')
 }
