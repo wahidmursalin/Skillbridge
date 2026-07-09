@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Signature element: the "bridge path" — a dashed stepped connector used
+   wherever we show progress from Skill -> Certificate -> Project -> Job. */
+.bridge-path {
+  position: relative;
+}
+.bridge-path::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background-image: linear-gradient(to right, #2563EB 60%, transparent 0%);
+  background-size: 12px 2px;
+  background-repeat: repeat-x;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.stat-mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  outline: 2px solid #2563EB;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
