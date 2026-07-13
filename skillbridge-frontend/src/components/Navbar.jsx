@@ -47,12 +47,20 @@ export default function Navbar() {
             </button>
           </div>
         ) : (
-          <Link
-            to="/login"
-            className="focus-ring rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-600"
-          >
-            Log in
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              to="/login"
+              className="focus-ring rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+            >
+              Log in
+            </Link>
+            <Link
+              to="/register"
+              className="focus-ring rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-600"
+            >
+              Sign up
+            </Link>
+          </div>
         )}
       </div>
     </header>
